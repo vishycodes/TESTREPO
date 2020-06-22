@@ -1,0 +1,147 @@
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#define MAX 100
+#define READONLY "r"
+#define WRITEONLY "w"
+
+struct student_detail
+{
+    char surname[30];
+    char forename[30];
+    char result[30];
+};
+
+int main(void)
+{
+    struct student_detail grades[MAX+1];
+    char stringline[100];
+    char file_import[100];
+    printf("Enter the file containing the student data to be sorted: ");
+    scanf("%s",file_import);
+
+
+    FILE *fp, *f_out;
+
+         if((fp = fopen(file_import, READONLY))== NULL) /* Opening the file from file path */
+        {
+            printf("Cannot open file"); /* If the file is not founf in the system please exit the program */
+            exit(EXIT_FAILURE);
+        }
+        int g=0;
+        int index =0;
+
+        while(!feof(fp))
+        {
+            fscanf(fp,"%s %s %s", grades[g].surname, grades[g].forename, grades[g].result);
+            printf("%s %s %s\n", grades[g].surname, grades[g].forename, grades[g].result);
+            g++;
+
+        }
+
+
+        fclose(fp);
+
+
+            int j;
+            int i;
+            bool match = true;
+            int k = 1;
+            int q = 0;
+
+            struct student_detail temp[MAX+1];
+
+
+
+            while(k < g)
+            {
+
+
+                for(i=0;i<g-k;i++)
+                    {
+                        match = false;
+
+                        while(match != true)
+                        {
+
+                            if(grades[i].surname[q] > grades[i+1].surname[q])
+                            {
+
+                                strcpy(temp[i].surname, grades[i].surname);
+                                strcpy(grades[i].surname,grades[i+1].surname);
+                                strcpy(grades[i+1].surname,temp[i].surname);
+
+                                strcpy(temp[i].surname, grades[i].forename);
+                                strcpy(grades[i].forename,grades[i+1].forename);
+                                strcpy(grades[i+1].forename,temp[i].surname);
+
+                                strcpy(temp[i].result, grades[i].result);
+                                strcpy(grades[i].result,grades[i+1].result);
+                                strcpy(grades[i+1].result,temp[i].result);
+
+                                match = true;
+                                q = 0;
+                                break;
+
+                            }
+
+                        if(grades[i].surname[q] == grades[i+1].surname[q])
+                        {
+
+                            q++;
+                        }
+
+                        if(grades[i].surname[q] < grades[i+1].surname[q])
+                        {
+                            q = 0;
+                            break;
+                        }
+
+
+                    }
+                }
+
+                k++;
+
+
+
+            }
+
+            printf("\n");
+            for(j=0;j<g;j++)
+            {
+                printf("%s %s %s\n", grades[j].surname, grades[j].forename, grades[j].result);
+            }
+
+             if ((f_out=fopen("sorted.txt", WRITEONLY ))==NULL)
+                {/*the if statement makes sure the file opens correctly, otherwise ends the program*/
+                    printf("Cannot open file\n");
+                    exit(EXIT_FAILURE);
+                }
+
+            for(int a=0 ; a <g ;a++)
+            {
+                if (strlen(grades[a].forename) + strlen(grades[a].surname)<=12)
+                {/*formats the grades*/
+                    fprintf(f_out, "%s %s\t\t%s\n", grades[a].surname, grades[a].forename, grades[a].result);
+                }
+
+                else
+                {
+                    fprintf(f_out, "%s %s  \t%s\n", grades[a].surname, grades[a].forename, grades[a].result);
+                }
+            }
+
+
+
+
+
+
+return(0);
+
+}
+
+
+NNNN
